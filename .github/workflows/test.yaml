@@ -14,8 +14,10 @@ jobs:
       - name: install requirements
         run: pip install -r requirements.txt
       - name: run py test
+        id: run-py-test
         run: pytest --cov-report html:htmlcov --cov-report term --cov=project tests
       - name: upload test reports
+        if: failure() && steps.run-py-test.outcome == 'failure'
         uses: actions/upload-artifact@v3
         with:
           name: test-report
